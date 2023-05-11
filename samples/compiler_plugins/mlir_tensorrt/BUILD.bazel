@@ -1,0 +1,152 @@
+# # Copyright 2023 The IREE Authors
+# #
+# # Licensed under the Apache License v2.0 with LLVM Exceptions.
+# # See https://llvm.org/LICENSE.txt for license information.
+# # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# load("//build_tools/bazel:build_defs.oss.bzl", "iree_compiler_register_plugin", "iree_gentbl_cc_library", "iree_tablegen_doc", "iree_td_library")
+
+# package(
+#     default_visibility = ["//visibility:public"],
+#     features = ["layering_check"],
+#     licenses = ["notice"],  # Apache 2.0
+# )
+
+# cc_library(
+#     name = "defs",
+#     includes = ["src"],
+# )
+
+# cc_library(
+#     name = "registration",
+#     srcs = [
+#         "src/PluginRegistration.cpp",
+#     ],
+#     deps = [
+#         ":IR",
+#         ":Transforms",
+#         ":defs",
+#         "//compiler/src/iree/compiler/PluginAPI",
+#         "@llvm-project//mlir:IR",
+#         "@llvm-project//mlir:Pass",
+#     ],
+# )
+
+# iree_compiler_register_plugin(
+#     plugin_id = "mlir_tensorrt",
+#     target = ":registration",
+# )
+
+# iree_td_library(
+#     name = "td_files",
+#     srcs = [
+#         "src/mlir-tensorrt/IR/MLIRTensorRTOps.td",
+#         "src/mlir-tensorrt/Transforms/Passes.td",
+#     ],
+#     deps = [
+#         "@llvm-project//mlir:ControlFlowInterfacesTdFiles",
+#         "@llvm-project//mlir:FuncTdFiles",
+#         "@llvm-project//mlir:InferTypeOpInterfaceTdFiles",
+#         "@llvm-project//mlir:OpBaseTdFiles",
+#         "@llvm-project//mlir:SideEffectInterfacesTdFiles",
+#         "@llvm-project//mlir:ViewLikeInterfaceTdFiles",
+#     ],
+# )
+
+# cc_library(
+#     name = "IR",
+#     srcs = [
+#         "src/mlir-tensorrt/IR/MLIRTensorRTDialect.cpp",
+#         "src/mlir-tensorrt/IR/MLIRTensorRTOps.cpp",
+#         "src/mlir-tensorrt/IR/MLIRTensorRTOps.cpp.inc",
+#     ],
+#     hdrs = [
+#         "src/mlir-tensorrt/IR/MLIRTensorRTDialect.h",
+#         "src/mlir-tensorrt/IR/MLIRTensorRTOps.h",
+#         "src/mlir-tensorrt/IR/MLIRTensorRTOps.h.inc",
+#     ],
+#     deps = [
+#         ":MLIRTensorRTOpsGen",
+#         ":defs",
+#         "@llvm-project//llvm:Support",
+#         "@llvm-project//mlir:FuncDialect",
+#         "@llvm-project//mlir:IR",
+#         "@llvm-project//mlir:Support",
+#     ],
+# )
+
+# iree_gentbl_cc_library(
+#     name = "MLIRTensorRTOpsGen",
+#     tbl_outs = [
+#         (
+#             ["--gen-dialect-decls"],
+#             "src/mlir-tensorrt/IR/MLIRTensorRTDialect.h.inc",
+#         ),
+#         (
+#             ["--gen-dialect-defs"],
+#             "src/mlir-tensorrt/IR/MLIRTensorRTDialect.cpp.inc",
+#         ),
+#         (
+#             ["--gen-op-decls"],
+#             "src/mlir-tensorrt/IR/MLIRTensorRTOps.h.inc",
+#         ),
+#         (
+#             ["--gen-op-defs"],
+#             "src/mlir-tensorrt/IR/MLIRTensorRTOps.cpp.inc",
+#         ),
+#     ],
+#     tblgen = "@llvm-project//mlir:mlir-tblgen",
+#     td_file = "src/mlir-tensorrt/IR/MLIRTensorRTOps.td",
+#     deps = [":td_files"],
+# )
+
+# cc_library(
+#     name = "Transforms",
+#     srcs = [
+#         "src/mlir-tensorrt/Transforms/LegalizeMLIRTensorRT.cpp",
+#     ],
+#     hdrs = [
+#         "src/mlir-tensorrt/Transforms/Passes.h",
+#         "src/mlir-tensorrt/Transforms/Passes.h.inc",
+#     ],
+#     deps = [
+#         ":IR",
+#         ":PassesIncGen",
+#         ":defs",
+#         "@llvm-project//mlir:FuncDialect",
+#         "@llvm-project//mlir:IR",
+#         "@llvm-project//mlir:Pass",
+#     ],
+# )
+
+# iree_gentbl_cc_library(
+#     name = "PassesIncGen",
+#     tbl_outs = [
+#         (
+#             ["--gen-pass-decls"],
+#             "src/mlir-tensorrt/Transforms/Passes.h.inc",
+#         ),
+#     ],
+#     tblgen = "@llvm-project//mlir:mlir-tblgen",
+#     td_file = "src/mlir-tensorrt/Transforms/Passes.td",
+#     deps = [
+#         ":td_files",
+#         "@llvm-project//mlir:PassBaseTdFiles",
+#     ],
+# )
+
+# iree_tablegen_doc(
+#     name = "MLIRTensorRTDialectDocGen",
+#     tbl_outs = [
+#         (
+#             [
+#                 "--gen-dialect-doc",
+#                 "-dialect=mlir_tensorrt",
+#             ],
+#             "src/mlir-tensorrt/IR/MLIRTensorRTDialect.md",
+#         ),
+#     ],
+#     tblgen = "@llvm-project//mlir:mlir-tblgen",
+#     td_file = "src/mlir-tensorrt/IR/MLIRTensorRTOps.td",
+#     deps = [":td_files"],
+# )
