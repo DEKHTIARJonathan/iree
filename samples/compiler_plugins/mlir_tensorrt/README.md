@@ -31,7 +31,7 @@ iree-compile \
   -o /tmp/print.vmfb
 
 export PYTHONPATH=${PYTHONPATH}
-python3 test/run_mock.py /tmp/print.vmfb
+python3 samples/compiler_plugins/mlir_tensorrt/test/run_mock.py /tmp/print.vmfb
 ```
 
 Should print:

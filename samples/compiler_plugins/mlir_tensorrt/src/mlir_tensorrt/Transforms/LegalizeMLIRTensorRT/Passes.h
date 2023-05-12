@@ -12,9 +12,24 @@
 #include "mlir/Pass/PassManager.h"
 
 namespace mlir::iree_compiler::IREE::MLIRTensorRT {
-
-std::unique_ptr<OperationPass<ModuleOp>> createLegalizeMLIRTensorRTPass();
-
+    std::unique_ptr<OperationPass<ModuleOp>> createLegalizeMLIRTensorRTPass();
 }  // namespace mlir::iree_compiler::IREE::MLIRTensorRT
+
+// namespace detail {
+//     #define GEN_PASS_DECL
+//     #define GEN_PASS_REGISTRATION
+//     #include "mlir_tensorrt/Transforms/LegalizeMLIRTensorRT/Passes.h.inc"  
+// }
+
+namespace detail {
+namespace {
+
+#define GEN_PASS_DECL
+#define GEN_PASS_REGISTRATION
+#define GEN_PASS_DEF_LEGALIZEMLIRTENSORRT
+#include "mlir_tensorrt/Transforms/LegalizeMLIRTensorRT/Passes.h.inc"
+
+}  // namespace
+}  // namespace detail
 
 #endif  // IREE_SAMPLES_COMPILER_PLUGINS_MLIR_TENSORRT_TRANSFORMS_LEGALIZEMLIRTENSORRT_PASSES_H_

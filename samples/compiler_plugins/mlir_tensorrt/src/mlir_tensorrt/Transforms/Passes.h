@@ -9,13 +9,4 @@
 
 #include "mlir_tensorrt/Transforms/LegalizeMLIRTensorRT/Passes.h"
 
-namespace detail {
-namespace {
-
-#define GEN_PASS_REGISTRATION
-#include "mlir_tensorrt/Transforms/LegalizeMLIRTensorRT/Passes.h.inc"
-
-}  // namespace
-}  // namespace detail
-
 #endif  // IREE_SAMPLES_COMPILER_PLUGINS_MLIR_TENSORRT_TRANSFORMS_PASSES_H_

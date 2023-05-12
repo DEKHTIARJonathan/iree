@@ -6,8 +6,8 @@
 
 include "mlir/Pass/PassBase.td"
 
-#ifndef IREE_MLIR_TENSSORT_PASSES
-#define IREE_MLIR_TENSSORT_PASSES
+#ifndef IREE_MLIR_TENSSORT_TRANSFORMS_LEGALIZETENSORRT_PASSES_TD
+#define IREE_MLIR_TENSSORT_TRANSFORMS_LEGALIZETENSORRT_PASSES_TD
 
 def LegalizeMLIRTensorRT : Pass<"iree-mlir-tensorrt-legalize", "mlir::ModuleOp"> {
   let summary = "Legalizes the MLIR TensorRT ops";
@@ -16,4 +16,4 @@ def LegalizeMLIRTensorRT : Pass<"iree-mlir-tensorrt-legalize", "mlir::ModuleOp">
   }];
 }
 
-#endif // IREE_MLIR_TENSSORT_PASSES
+#endif // IREE_MLIR_TENSSORT_TRANSFORMS_LEGALIZETENSORRT_PASSES_TD

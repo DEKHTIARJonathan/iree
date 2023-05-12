@@ -11,14 +11,11 @@
 #include "mlir_tensorrt/IR/MLIRTensorRTOps.h"
 #include "mlir_tensorrt/Transforms/LegalizeMLIRTensorRT/Passes.h"
 
-#define GEN_PASS_DEF_LEGALIZEMLIRTENSORRT
-#include "mlir_tensorrt/Transforms/LegalizeMLIRTensorRT/Passes.h.inc"
-
 namespace mlir::iree_compiler::IREE::MLIRTensorRT {
 namespace {
 
 class LegalizeMLIRTensorRTPass
-    : public ::impl::LegalizeMLIRTensorRTBase<LegalizeMLIRTensorRTPass> {
+    : public ::detail::impl::LegalizeMLIRTensorRTBase<LegalizeMLIRTensorRTPass> {
  public:
   void runOnOperation() override {
     auto *context = &getContext();
